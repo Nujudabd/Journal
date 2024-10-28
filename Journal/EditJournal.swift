@@ -1,18 +1,35 @@
-//
-//  EditJournal.swift
-//  Journal
-//
-//  Created by Nujud Abdullah on 24/04/1446 AH.
-//
-
 import SwiftUI
 
 struct EditJournal: View {
+    @Binding var journalEntry: JournalEntry
+    @Environment(\.dismiss) var dismiss
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            TextField("Title", text: $journalEntry.title)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+
+            TextEditor(text: $journalEntry.content)
+                .border(Color.gray)
+                .padding()
+
+            Button("Save") {
+                dismiss()
+            }
+            .padding()
+        }
+        .navigationTitle("Edit Journal Entry")
+        .padding()
     }
 }
 
-#Preview {
-    EditJournal()
+struct EditJournal_Previews: PreviewProvider {
+    @State static var sampleEntry = JournalEntry(title: "Sample Title", content: "Sample content.", date: Date())
+
+    static var previews: some View {
+        NavigationView {
+            EditJournal(journalEntry: $sampleEntry)
+        }
+    }
 }
