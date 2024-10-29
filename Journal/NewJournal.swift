@@ -1,8 +1,8 @@
+
+
 import SwiftUI
 
 struct NewJournal: View {
-    
-    
     @Environment(\.dismiss) var dismiss
     @Binding var journalEntries: [JournalEntry]
     @State private var journalTitle: String = ""
@@ -17,7 +17,8 @@ struct NewJournal: View {
     var body: some View {
         ZStack {
             Color(hex: "#1A1A1C").ignoresSafeArea()
-            VStack(spacing: 10) {
+
+            VStack {
                 HStack {
                     Button(action: {
                         dismiss()
@@ -26,7 +27,7 @@ struct NewJournal: View {
                             .padding()
                             .foregroundColor(Color(hex: "#A499FF"))
                     }
-                    .padding(.trailing, 240)
+                    .padding(.trailing, 220)
 
                     Button(action: {
                         saveJournal()
@@ -35,34 +36,33 @@ struct NewJournal: View {
                             .padding()
                             .foregroundColor(Color(hex: "#A499FF"))
                     }
+                    .padding(.trailing)
                 }
 
-                TextField("Title", text: $journalTitle)
+                TextField("Title", text: $journalTitle, axis: .vertical)
                     .foregroundColor(.white)
                     .font(.largeTitle)
                     .fontWeight(.bold)
+                    .frame(height: 50)
                     .padding(.leading, 10)
 
                 Text("\(currentDate)")
                     .foregroundColor(Color(hex: "#A39A9A"))
                     .font(.headline)
-                    .padding(.trailing, 280)
+                    .padding(.trailing, 290)
+                    .padding(.bottom, 5)
 
-                TextEditor(text: $journalContent)
+                TextField("Type your Journal...", text: $journalContent, axis: .vertical)
                     .foregroundColor(.white)
                     .font(.system(size: 20))
-                    .padding(10)
-                    .scrollContentBackground(.hidden)
-                    .background(Color(hex: "#1A1A1C"))
-                    .cornerRadius(10)
-                    .padding(.horizontal, 10)
-                            }
-            .padding(.top, 20)
+                    .frame(width: 380, height: 450, alignment: .top)
+                    .padding(.leading, 10)
+                    .padding(.bottom, 160)
+            }
         }
     }
 
     private func saveJournal() {
-        guard !journalTitle.isEmpty || !journalContent.isEmpty else { return }
         let newEntry = JournalEntry(title: journalTitle, content: journalContent, date: Date())
         journalEntries.append(newEntry)
         dismiss()

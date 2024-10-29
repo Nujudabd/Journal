@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct JournalEntry: Identifiable {
-    let id = UUID()
+struct JournalEntry: Identifiable, Codable {
+    var id = UUID()
     var title: String
     var content: String
     var date: Date
@@ -22,6 +22,9 @@ struct ContentView: View {
                     .onAppear { DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { showSplash = false } }
             } else {
                 mainContentView
+                    .onAppear {
+                        loadJournalEntries()
+                    }
             }
         }
     }
@@ -38,8 +41,7 @@ struct ContentView: View {
                         Menu {
                             Button(action: {
                                 selectedFilter = "Bookmark"
-                            })
-                            {
+                            }) {
                                 Text("Bookmark")
                             }
                             Button(action: {
@@ -73,20 +75,22 @@ struct ContentView: View {
                         }
                         .sheet(isPresented: $isShowingNewJournal) {
                             NewJournal(journalEntries: $journalEntries)
+                                .onDisappear {
+                                    saveJournalEntries()
+                                }
                         }
                     }
-                    
                     .padding()
                     
-                    VStack {
-                        Text("Journal")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .frame(width: 116, height: 40)
-                            .foregroundColor(Color(hex: "FFFFFF"))
-                            .padding(.top, 20)
-                            .padding(.trailing, 270)
-                        
+                    Text("Journal")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .frame(width: 116, height: 40)
+                        .foregroundColor(Color(hex: "FFFFFF"))
+                        .padding(.top, 20)
+                        .padding(.trailing, 270)
+
+                    if !journalEntries.isEmpty {
                         ZStack {
                             TextField("Search...", text: $searchText)
                                 .padding(10)
@@ -100,8 +104,8 @@ struct ContentView: View {
                                 .foregroundColor(Color(hex: "8E8E93"))
                                 .padding(.leading, 300)
                         }
+                        .padding(.bottom, 50)
                     }
-                    .padding(.bottom, 50)
 
                     if journalEntries.isEmpty {
                         introductoryContent
@@ -116,6 +120,7 @@ struct ContentView: View {
 
     private var introductoryContent: some View {
         VStack {
+            Spacer()
             Image("Journal")
                 .resizable()
                 .frame(width: 77.7, height: 101)
@@ -125,13 +130,11 @@ struct ContentView: View {
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(Color(hex: "D4C8FF"))
-                .padding(.bottom, 10)
+                .padding(.bottom, 8)
 
             Text("Craft your personal diary, tap the plus icon to begin")
                 .lineLimit(nil)
                 .frame(width: 282, height: 53)
-               // .font(.body)
-               // .fontWeight(.light)
                 .multilineTextAlignment(.center)
                 .foregroundColor(Color(hex: "FFFFFF"))
         }
@@ -164,6 +167,7 @@ struct ContentView: View {
                         .onTapGesture {
                             if let index = journalEntries.firstIndex(where: { $0.id == entry.id }) {
                                 journalEntries[index].isBookmarked.toggle()
+                                saveJournalEntries()
                             }
                         }
                 }
@@ -208,10 +212,28 @@ struct ContentView: View {
 
     private func editJournal(entry: JournalEntry) {
         // Edit journal entry logic here
+        saveJournalEntries()
     }
 
     private func deleteJournalEntry(at offsets: IndexSet) {
         journalEntries.remove(atOffsets: offsets)
+        saveJournalEntries()  
+    }
+
+    private func loadJournalEntries() {
+        if let data = UserDefaults.standard.data(forKey: "journalEntries") {
+            let decoder = JSONDecoder()
+            if let loadedEntries = try? decoder.decode([JournalEntry].self, from: data) {
+                journalEntries = loadedEntries
+            }
+        }
+    }
+
+    private func saveJournalEntries() {
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(journalEntries) {
+            UserDefaults.standard.set(encoded, forKey: "journalEntries")
+        }
     }
 }
 
