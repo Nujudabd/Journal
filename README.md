@@ -1,18 +1,18 @@
-Nujud Journal 📖💜:
+## Nujud Journal 📖💜:
 
 is an app that helps users to express there thoughts, experiences, and feelings freely, users also have the ability to bookmark important journals, edit, or even delete there journals.
 
-Journal App Features 🌟:
+## Journal App Features 🌟:
 - Clear and simple interface
 - Effective navigations and inputs
 - Easey to use
 
-Journal App Structure 🖋️:
-Splash Page: The Splash page shows the logo, and a messge for the user.
-Main page: The main page shows old journals list.
-New Journal Page: Contains "Journal Title", "Journal date", and "The journal content"
+## Journal App Structure 🖋️:
+- Splash Page: The Splash page shows the logo, and a messge for the user.
+- Main page: The main page shows old journals list.
+- New Journal Page: Contains "Journal Title", "Journal date", and "The journal content"
 
-Requirements ⚙️:
+## Requirements ⚙️:
 - IOS 15.0 or later
 - Xcode 13.0 or later
 - SwiftUI
