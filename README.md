@@ -18,4 +18,4 @@ is an app that helps users to express there thoughts, experiences, and feelings 
 - SwiftUI
 
 
-![5F009839-6D0C-43AF-A26C-D732924A6D01](https://github.com/user-attachments/assets/307aa9ad-8f8f-41c4-aeb3-0d72ae587a15)
+![5F009839-6D0C-43AF-A26C-D732924A6D01_1_201_a](https://github.com/user-attachments/assets/e82ba5ee-5ddf-4baa-acdf-0a048b81338d)
